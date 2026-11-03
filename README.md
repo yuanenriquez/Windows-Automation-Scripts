@@ -1,40 +1,58 @@
 # Windows System Automation & Process Management
 
-A suite of custom Windows batch scripts and PowerShell wrappers engineered to automate local network routing, manage nested background processes, and handle dynamic file operations. 
+A collection of personal Windows batch scripts and PowerShell helpers for automating software installation, scheduled-task management, process control, configuration-file changes, file handling, and monitor controls.
 
-These tools were built to solve specific operational bottlenecks, optimize system resources, and eliminate redundant manual configurations.
+These scripts were built to reduce repetitive steps in a specific local Windows setup. They are personal automation utilities, not a general-purpose deployment or network-management platform.
 
-## ⚙️ Configuration & Deployment Note
-This repository reflects a live local environment. Several scripts (such as `Update mudfish.bat` and `Static Steam In Tray.bat`) contain hardcoded directory paths (e.g., `C:\C_Softwares\...`) designed for a specific custom storage architecture. 
+## Configuration & Usage Note
 
-**To deploy these scripts on a new local machine, you must open them in a text editor and update the directory variables to match your own system's target paths.**
+Several scripts contain hardcoded paths (for example, directories under `C:\\C_Softwares\\...`) that match my own storage setup. Before using them on another machine, review the scripts and update any paths, application names, or scheduled-task names to match that environment.
 
-## 🛠️ Core Scripts & Capabilities
+Some scripts also require administrator privileges.
 
-### 1. Automated Software Deployment (`Update mudfish.bat`)
-*   **Function:** Automates the silent installation and updating of network routing software.
-*   **Logic:** Scans the `Downloads` directory for specific installer patterns, uses `taskkill` to forcefully terminate conflicting background processes, executes a silent background installation to a custom directory, and deletes the leftover installer.
+## Scripts & Capabilities
 
-### 2. Task Scheduler & Privilege Escalation (`Suspend Mudfish For Replays.bat`)
-*   **Function:** Dynamically toggles specific Windows Task Scheduler rules to suspend network routing during safe periods.
-*   **Logic:** Checks for administrative privileges and requests elevation if missing. Uses `schtasks` to disable and re-enable specific network tasks based on interactive user keystrokes.
+### 1. Mudfish Installer Automation — `Update mudfish.bat`
 
-### 3. Static Configuration Injection (`Static Steam In Tray.bat`)
-*   **Function:** Automates application launch parameters and forces offline modes.
-*   **Logic:** Utilizes PowerShell wrappers to inject string replacements directly into local `.vdf` configuration files to manipulate software variables before execution, then launches the application silently.
+- Scans the Downloads folder for a matching Mudfish installer.
+- Stops relevant running processes before installation.
+- Runs the installer silently using a custom installation directory.
+- Removes the downloaded installer after the installation process.
 
-### 4. File Operation & String Sanitization (`Auto-Rename and Execute Gemini Script.bat`)
-*   **Function:** A dynamic file management workflow that extracts internal metadata to rename files automatically.
-*   **Logic:** Scans directories by date, parses internal text files line-by-line to extract specific title strings, sanitizes the output to remove invalid Windows characters, prevents overwrite errors with random number generation, and provides an interactive UI.
+This automates the installer workflow; it does not independently configure network routes.
 
-### 5. Hardware API Manipulation (`DIM.bat` & `OFF.bat`)
-*   **Function:** Controls physical display states directly from the command line.
-*   **Logic:** Uses PowerShell wrappers to hook into the Windows API (`user32.dll`) and WMI (Windows Management Instrumentation) objects to instantly power off monitors or manipulate brightness levels globally.
+### 2. Scheduled-Task Control — `Suspend Mudfish For Replays.bat`
 
-### 6. File Attribute Management (`LoL config toggle.bat`)
-*   **Function:** Locks and unlocks application configuration files to prevent unwanted overwrites.
-*   **Logic:** Evaluates current file states and dynamically toggles the Read-Only (`+r`/`-r`) attributes on target JSON and CFG files, outputting execution logs to a localized `.log` file.
+- Checks for administrator privileges and requests elevation when needed.
+- Uses Windows Task Scheduler commands to disable or re-enable selected scheduled tasks associated with Mudfish.
+- Uses interactive input to control when those tasks are toggled.
 
-### 7. Process Termination (`Close RIiot and LoL.bat`)
-*   **Function:** forcefully cleans up nested background processes.
-*   **Logic:** Uses `taskkill` to terminate multiple hidden application layers and crash handlers simultaneously to free up system resources.
+### 3. Steam Configuration Update — `Static Steam In Tray.bat`
+
+- Uses PowerShell text replacement to update selected offline-mode settings in Steam's local `loginusers.vdf` file.
+- Launches Steam after updating the configuration.
+
+### 4. Downloaded File Renaming — `Auto-Rename and Execute Gemini Script.bat`
+
+- Searches the Downloads folder for matching Gemini-generated text or batch files.
+- Reads a title from the file content and sanitizes invalid Windows filename characters.
+- Renames the file and provides options to open the Downloads folder or run a batch file.
+
+### 5. Monitor Controls — `DIM.bat` and `OFF.bat`
+
+- Uses Windows Management Instrumentation (WMI) to change monitor brightness where supported.
+- Uses Windows API calls through PowerShell to send a monitor power-off message.
+- Includes a keyboard-state check in the brightness script for its restore interaction.
+
+### 6. Configuration File Attribute Toggle — `LoL config toggle.bat`
+
+- Checks and toggles the Read-only attribute on selected game configuration files.
+- Writes execution information to a local log file.
+
+### 7. Process Termination — `Close RIiot and LoL.bat`
+
+- Uses `taskkill` to terminate selected Riot and League of Legends processes, including related background processes and crash handlers.
+
+## Scope
+
+These scripts demonstrate practical Windows batch scripting, command-line operations, PowerShell usage, process management, scheduled-task control, file manipulation, and basic Windows management API interaction. They were created for my own environment and should be reviewed before use on another system.
